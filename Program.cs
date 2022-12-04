@@ -1,61 +1,10 @@
 ﻿internal class Program
 {
-
     private static void Main(string[] args)
     {
-        Func<double, double> FootToMeter = x => (double)(x * 0.3048); //x is input unit
-        Func<double, double> MeterToFoot = x => (double)(x / 0.3048);
-        Func<double, double> InchToMeter = x => (double)(x * 0.0254);
-        Func<double, double> MeterToInch = x => (double)(x / 0.0254);
+        var converter = new UnitsConverter();
 
-        string ConvertLength(string input, string output)
-        {
-            string[] arr = new string[2];
-            int inputValue = 0;
-            string inputMeasure = "";
-            try
-            {
-                arr = input.Split(" ");
-                inputValue = Int32.Parse(arr[0]);
-                inputMeasure = arr[1];
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            
-
-            double x = 0;
-            double val = 0;
-
-            switch(inputMeasure){
-                case "meter":
-                    x = inputValue;
-                    break;
-                case "foot":
-                    x = FootToMeter(inputValue);
-                    break;
-                case "inch":
-                    x = InchToMeter(inputValue);
-                    break;
-            }
-
-            switch(output){
-                case "meter":
-                    val = x;
-                    break;
-                case "foot":
-                    val = MeterToFoot(x);
-                    break;
-                case "inch":
-                    val = MeterToInch(x);
-                    break;
-            }
-
-            return String.Format("{0} = {1} {2}",input, val.ToString(), output);
-        }
-
-        string input = "123 inch";
+        string input = "1 meter";
         string output = "foot";
         
         /*Console.Write("input (value unit): ");
@@ -63,15 +12,77 @@
         Console.Write("output (unit): ");
         output = Console.ReadLine();*/
         
-        Console.WriteLine(ConvertLength(input, output));
+        Console.WriteLine(converter.Convert(input, output));
     }
 }
 
+public class UnitsConverter
+{
+    private double FootToMeter(double x) => x * 0.3048; // define conversion formula to/from SI unit, x is input/SI unit
+    private double MeterToFoot(double x) => x / 0.3048;
+    private double InchToMeter(double x) => x * 0.0254;
+    private double MeterToInch(double x) => x / 0.0254;
 
-//meters feet inches
-//meter = foot * 0.3048
-//foot = meter / 0.3048
+    private double ToSI(string measure, double value)
+    {
+        double x = 0;
+        switch(measure){    // define which formula should be invoked for specific unit
+            case "meter":   // do not forget, to define SI unit for new type of conversion, should return value (without invoking conversion method)
+                x = value;
+                break;
+            case "foot":
+                x = FootToMeter(value);
+                break;
+            case "inch":
+                x = InchToMeter(value);
+                break;
+        }
+        return x;
+    }
 
-//("1 meter", "feet") -> "3.28 feet"
-//("3 kiloinches", "meter") -> "76.19 meter"
+    private double FromSI(string measure, double value)
+    {
+        double x = 0;
+        switch(measure){    // define which formula should be invoked for specific unit
+            case "meter":   // do not forget, to define SI unit for new type of conversion, should return value (without invoking conversion method)
+                x = value;
+                break;
+            case "foot":
+                x = MeterToFoot(value);
+                break;
+            case "inch":
+                x = MeterToInch(value);
+                break;
+        }
+        return x;
+    }
+
+    private string[] Prefixes(){
+        string[] ret = new string[2];
+        return ret;
+    }
+
+    public string Convert(string input, string output)
+    {
+        string[] arr = new string[2];
+        int inputValue = 0;
+        string inputMeasure = "";
+        try
+        {
+            arr = input.Split(" ");
+            inputValue = Int32.Parse(arr[0]);
+            inputMeasure = arr[1];
+        }
+        catch(Exception)
+        {
+            throw;
+        }
+
+        //add prefixes detection
+        
+        double val = FromSI(output, ToSI(inputMeasure, inputValue));
+
+        return String.Format("{0} = {1} {2}",input, val.ToString(), output);
+    }
+}
 
