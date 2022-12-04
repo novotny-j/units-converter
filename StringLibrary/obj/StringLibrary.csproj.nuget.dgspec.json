@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\novot\\units-converter\\units-converter.csproj": {}
+    "C:\\Users\\novot\\units-converter\\StringLibrary\\StringLibrary.csproj": {}
   },
   "projects": {
-    "C:\\Users\\novot\\units-converter\\units-converter.csproj": {
+    "C:\\Users\\novot\\units-converter\\StringLibrary\\StringLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\novot\\units-converter\\units-converter.csproj",
-        "projectName": "units-converter",
-        "projectPath": "C:\\Users\\novot\\units-converter\\units-converter.csproj",
+        "projectUniqueName": "C:\\Users\\novot\\units-converter\\StringLibrary\\StringLibrary.csproj",
+        "projectName": "StringLibrary",
+        "projectPath": "C:\\Users\\novot\\units-converter\\StringLibrary\\StringLibrary.csproj",
         "packagesPath": "C:\\Users\\novot\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\novot\\units-converter\\obj\\",
+        "outputPath": "C:\\Users\\novot\\units-converter\\StringLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\novot\\AppData\\Roaming\\NuGet\\NuGet.Config"

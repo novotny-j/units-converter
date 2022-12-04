@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("units-converter")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("StringLibrary")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("units-converter")]
-[assembly: System.Reflection.AssemblyTitleAttribute("units-converter")]
+[assembly: System.Reflection.AssemblyProductAttribute("StringLibrary")]
+[assembly: System.Reflection.AssemblyTitleAttribute("StringLibrary")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Vygenerované třídou WriteCodeFragment nástroje MSBuild

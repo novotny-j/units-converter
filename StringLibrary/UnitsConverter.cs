@@ -1,21 +1,4 @@
-﻿internal class Program
-{
-    private static void Main(string[] args)
-    {
-        var converter = new UnitsConverter();
-
-        string input = "1 fahrenheit";
-        string output = "celsius";
-        
-        /*Console.Write("input (value unit): ");
-        input = Console.ReadLine();
-        Console.Write("output (unit): ");
-        output = Console.ReadLine();*/
-        
-        Console.WriteLine(converter.Convert(input, output));
-    }
-}
-
+﻿namespace StringLibrary;
 public class UnitsConverter
 {
 //length
@@ -30,7 +13,7 @@ public class UnitsConverter
     private double FahrenheitToCelsius (double x) => (x - 32) / 1.8;
     private double CelsiusToFahrenheit (double x) => (x * 1.8) + 32;
 
-    private double ToBase(string measure, double value)
+    private double ToBaseUnit(string measure, double value)
     {
         double x = 0;
         switch(measure){    // define which formula should be invoked for specific unit
@@ -62,7 +45,7 @@ public class UnitsConverter
         return x;
     }
 
-    private double FromBase(string measure, double value)
+    private double FromBaseUnit(string measure, double value)
     {
         double x = 0;
         switch(measure){    // define which formula should be invoked for specific unit
@@ -93,7 +76,7 @@ public class UnitsConverter
         }
         return x;
     }
-    
+
     private string[] GetPrefix(string measure)
     {        
         switch (measure)
@@ -123,6 +106,16 @@ public class UnitsConverter
             case string a when a.Contains("mili"): return new [] { "mili", "-3" };
             case string a when a.Contains("centi"): return new [] { "centi", "-2" };
             case string a when a.Contains("deci"): return new [] { "deci", "-1" };
+
+        // binary order of magnitude
+            case string a when a.Contains("yobi"): return new [] { "yotta", "b8" };
+            case string a when a.Contains("zebi"): return new [] { "zetta", "b7" };
+            case string a when a.Contains("exbi"): return new [] { "exa", "b6" };
+            case string a when a.Contains("pebi"): return new [] { "peta", "b5" };
+            case string a when a.Contains("tebi"): return new [] { "tera", "b4" };
+            case string a when a.Contains("gibi"): return new [] { "giga", "b3" };
+            case string a when a.Contains("mebi"): return new [] { "mega", "b2" };
+            case string a when a.Contains("kibi"): return new [] { "kilo", "b1" };
         }
 
         return new [] { "","0" };
@@ -147,25 +140,34 @@ public class UnitsConverter
         }
 
         string[] inputPrefix = GetPrefix(inputMeasure);
-        if (inputPrefix[0] != "")
+        if(inputPrefix[0] != "")
         {
             inputMeasure = inputMeasure.Substring(inputPrefix[0].Length);
-            inputValue *= Math.Pow(10,Int32.Parse(inputPrefix[1]));
+            if(inputPrefix[1].Contains("b"))    //check for binary order
+            {
+                inputPrefix[1] = inputPrefix[1].Substring(1);
+                inputValue *= Math.Pow(1024,Int32.Parse(inputPrefix[1]));
+            }
+            else
+                inputValue *= Math.Pow(10,Int32.Parse(inputPrefix[1]));
         }
 
         string[] outputPrefix = GetPrefix(output);
-        if (outputPrefix[0] != "")
+        if(outputPrefix[0] != "")
         {
             outputBase = output.Substring(outputPrefix[0].Length);
-            outputValue = FromBase(outputBase, ToBase(inputMeasure, inputValue));
-            outputValue /= Math.Pow(10,Int32.Parse(outputPrefix[1]));
+            outputValue = FromBaseUnit(outputBase, ToBaseUnit(inputMeasure, inputValue));
+            if(outputPrefix[1].Contains("b"))    //check for binary order
+            {
+                outputPrefix[1] = outputPrefix[1].Substring(1);
+                outputValue /= Math.Pow(1024,Int32.Parse(outputPrefix[1]));
+            }
+            else
+                outputValue /= Math.Pow(10,Int32.Parse(outputPrefix[1]));
         }
         else
-        {
-            outputValue = FromBase(outputBase, ToBase(inputMeasure, inputValue));
-        }
+            outputValue = FromBaseUnit(outputBase, ToBaseUnit(inputMeasure, inputValue));
 
         return String.Format("{0} = {1:N2} {2}",input, outputValue, output);
     }
 }
-
