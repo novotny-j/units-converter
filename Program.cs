@@ -4,8 +4,8 @@
     {
         var converter = new UnitsConverter();
 
-        string input = "1 meter";
-        string output = "foot";
+        string input = "1 fahrenheit";
+        string output = "celsius";
         
         /*Console.Write("input (value unit): ");
         input = Console.ReadLine();
@@ -18,16 +18,24 @@
 
 public class UnitsConverter
 {
-    private double FootToMeter(double x) => x * 0.3048; // define conversion formula to/from SI unit, x is input/SI unit
+//length
+    private double FootToMeter(double x) => x * 0.3048; // define conversion formula to/from base unit, x is input/base unit
     private double MeterToFoot(double x) => x / 0.3048;
     private double InchToMeter(double x) => x * 0.0254;
     private double MeterToInch(double x) => x / 0.0254;
+//data
+    private double BitToByte(double x) => x * 8;
+    private double ByteToBit(double x) => x / 8;
+//tempearature
+    private double FahrenheitToCelsius (double x) => (x - 32) / 1.8;
+    private double CelsiusToFahrenheit (double x) => (x * 1.8) + 32;
 
-    private double ToSI(string measure, double value)
+    private double ToBase(string measure, double value)
     {
         double x = 0;
         switch(measure){    // define which formula should be invoked for specific unit
-            case "meter":   // do not forget, to define SI unit for new type of conversion, should return value (without invoking conversion method)
+        //length
+            case "meter":   // do not forget, to define base unit for new type of conversion, should return value (without invoking conversion method)
                 x = value;
                 break;
             case "foot":
@@ -36,15 +44,30 @@ public class UnitsConverter
             case "inch":
                 x = InchToMeter(value);
                 break;
+        //data
+            case "byte":
+                x = value;
+                break;
+            case "bit":
+                x = BitToByte(value);
+                break;
+        //temperature
+            case "celsius":
+                x = value;
+                break;
+            case "fahrenheit":
+                x = FahrenheitToCelsius(value);
+                break;
         }
         return x;
     }
 
-    private double FromSI(string measure, double value)
+    private double FromBase(string measure, double value)
     {
         double x = 0;
         switch(measure){    // define which formula should be invoked for specific unit
-            case "meter":   // do not forget, to define SI unit for new type of conversion, should return value (without invoking conversion method)
+        //length
+            case "meter":   // do not forget, to define base unit for new type of conversion, should return value (without invoking conversion method)
                 x = value;
                 break;
             case "foot":
@@ -53,9 +76,24 @@ public class UnitsConverter
             case "inch":
                 x = MeterToInch(value);
                 break;
+        //data
+            case "byte":
+                x = value;
+                break;
+            case "bit":
+                x = ByteToBit(value);
+                break;
+        //temperature
+            case "celsius":
+                x = value;
+                break;
+            case "fahrenheit":
+                x = CelsiusToFahrenheit(value);
+                break;
         }
         return x;
     }
+    
     private string[] GetPrefix(string measure)
     {        
         switch (measure)
