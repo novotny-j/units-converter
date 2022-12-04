@@ -56,21 +56,51 @@ public class UnitsConverter
         }
         return x;
     }
+    private string[] GetPrefix(string measure)
+    {        
+        switch (measure)
+        {
+            case string a when a.Contains("quetta"): return new [] { "quetta", "30" };
+            case string a when a.Contains("ronna"): return new [] { "ronna", "27" };
+            case string a when a.Contains("yotta"): return new [] { "yotta", "24" };
+            case string a when a.Contains("zetta"): return new [] { "zetta", "21" };
+            case string a when a.Contains("exa"): return new [] { "exa", "18" };
+            case string a when a.Contains("peta"): return new [] { "peta", "15" };
+            case string a when a.Contains("tera"): return new [] { "tera", "12" };
+            case string a when a.Contains("giga"): return new [] { "giga", "9" };
+            case string a when a.Contains("mega"): return new [] { "mega", "6" };
+            case string a when a.Contains("kilo"): return new [] { "kilo", "3" };
+            case string a when a.Contains("hecto"): return new [] { "hecto", "2" };
+            case string a when a.Contains("deca"): return new [] { "deca", "1" };
 
-    private string[] Prefixes(){
-        string[] ret = new string[2];
-        return ret;
+            case string a when a.Contains("quecto"): return new [] { "quecto", "-30" };
+            case string a when a.Contains("ronto"): return new [] { "ronto", "-27" };
+            case string a when a.Contains("yocto"): return new [] { "yocto", "-24" };
+            case string a when a.Contains("zepto"): return new [] { "zepto", "-21" };
+            case string a when a.Contains("alto"): return new [] { "alto", "-18" };
+            case string a when a.Contains("femto"): return new [] { "femto", "-15" };
+            case string a when a.Contains("pico"): return new [] { "pico", "-12" };
+            case string a when a.Contains("nano"): return new [] { "nano", "-9" };
+            case string a when a.Contains("micro"): return new [] { "micro", "-6" };
+            case string a when a.Contains("mili"): return new [] { "mili", "-3" };
+            case string a when a.Contains("centi"): return new [] { "centi", "-2" };
+            case string a when a.Contains("deci"): return new [] { "deci", "-1" };
+        }
+
+        return new [] { "","0" };
     }
 
     public string Convert(string input, string output)
     {
         string[] arr = new string[2];
-        int inputValue = 0;
+        double inputValue = 0;
+        double outputValue = 0;
         string inputMeasure = "";
+        string outputBase = output;
         try
         {
             arr = input.Split(" ");
-            inputValue = Int32.Parse(arr[0]);
+            inputValue = Double.Parse(arr[0]);
             inputMeasure = arr[1];
         }
         catch(Exception)
@@ -78,11 +108,26 @@ public class UnitsConverter
             throw;
         }
 
-        //add prefixes detection
-        
-        double val = FromSI(output, ToSI(inputMeasure, inputValue));
+        string[] inputPrefix = GetPrefix(inputMeasure);
+        if (inputPrefix[0] != "")
+        {
+            inputMeasure = inputMeasure.Substring(inputPrefix[0].Length);
+            inputValue *= Math.Pow(10,Int32.Parse(inputPrefix[1]));
+        }
 
-        return String.Format("{0} = {1} {2}",input, val.ToString(), output);
+        string[] outputPrefix = GetPrefix(output);
+        if (outputPrefix[0] != "")
+        {
+            outputBase = output.Substring(outputPrefix[0].Length);
+            outputValue = FromBase(outputBase, ToBase(inputMeasure, inputValue));
+            outputValue /= Math.Pow(10,Int32.Parse(outputPrefix[1]));
+        }
+        else
+        {
+            outputValue = FromBase(outputBase, ToBase(inputMeasure, inputValue));
+        }
+
+        return String.Format("{0} = {1:N2} {2}",input, outputValue, output);
     }
 }
 
