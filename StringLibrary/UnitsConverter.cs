@@ -105,7 +105,7 @@ public class UnitsConverter
             case string a when a.Contains("pico"): return new [] { "pico", "-12" };
             case string a when a.Contains("nano"): return new [] { "nano", "-9" };
             case string a when a.Contains("micro"): return new [] { "micro", "-6" };
-            case string a when a.Contains("mili"): return new [] { "mili", "-3" };
+            case string a when a.Contains("milli"): return new [] { "mili", "-3" };
             case string a when a.Contains("centi"): return new [] { "centi", "-2" };
             case string a when a.Contains("deci"): return new [] { "deci", "-1" };
 
