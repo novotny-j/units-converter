@@ -1,15 +1,17 @@
 ﻿namespace StringLibrary;
 public class UnitsConverter
 {
-//length
+    // to add conversion unit, one has to add formulas to and from base unit, than define references in both switch methods ("ToBaseUnit" and "FromBaseUnit")
+
+    //length
     private double FootToMeter(double x) => x * 0.3048; // define conversion formula to/from base unit, x is input/base unit
     private double MeterToFoot(double x) => x / 0.3048;
     private double InchToMeter(double x) => x * 0.0254;
     private double MeterToInch(double x) => x / 0.0254;
-//data
+    //data
     private double BitToByte(double x) => x * 8;
     private double ByteToBit(double x) => x / 8;
-//tempearature
+    //tempearature
     private double FahrenheitToCelsius (double x) => (x - 32) / 1.8;
     private double CelsiusToFahrenheit (double x) => (x * 1.8) + 32;
 
@@ -17,7 +19,7 @@ public class UnitsConverter
     {
         double x = 0;
         switch(measure){    // define which formula should be invoked for specific unit
-        //length
+            //length
             case "meter":   // do not forget, to define base unit for new type of conversion, should return value (without invoking conversion method)
                 x = value;
                 break;
@@ -27,14 +29,14 @@ public class UnitsConverter
             case "inch":
                 x = InchToMeter(value);
                 break;
-        //data
+            //data
             case "byte":
                 x = value;
                 break;
             case "bit":
                 x = BitToByte(value);
                 break;
-        //temperature
+            //temperature
             case "celsius":
                 x = value;
                 break;
@@ -49,7 +51,7 @@ public class UnitsConverter
     {
         double x = 0;
         switch(measure){    // define which formula should be invoked for specific unit
-        //length
+            //length
             case "meter":   // do not forget, to define base unit for new type of conversion, should return value (without invoking conversion method)
                 x = value;
                 break;
@@ -59,14 +61,14 @@ public class UnitsConverter
             case "inch":
                 x = MeterToInch(value);
                 break;
-        //data
+            //data
             case "byte":
                 x = value;
                 break;
             case "bit":
                 x = ByteToBit(value);
                 break;
-        //temperature
+            //temperature
             case "celsius":
                 x = value;
                 break;
@@ -78,7 +80,7 @@ public class UnitsConverter
     }
 
     private string[] GetPrefix(string measure)
-    {        
+    {
         switch (measure)
         {
             case string a when a.Contains("quetta"): return new [] { "quetta", "30" };
@@ -107,7 +109,7 @@ public class UnitsConverter
             case string a when a.Contains("centi"): return new [] { "centi", "-2" };
             case string a when a.Contains("deci"): return new [] { "deci", "-1" };
 
-        // binary order of magnitude
+            // binary order of magnitude
             case string a when a.Contains("yobi"): return new [] { "yotta", "b8" };
             case string a when a.Contains("zebi"): return new [] { "zetta", "b7" };
             case string a when a.Contains("exbi"): return new [] { "exa", "b6" };
@@ -121,7 +123,7 @@ public class UnitsConverter
         return new [] { "","0" };
     }
 
-    public string Convert(string input, string output)
+    public string Convert(string input, string output)  // input syntax is all lowercase, measures in singular form
     {
         string[] arr = new string[2];
         double inputValue = 0;
@@ -136,14 +138,14 @@ public class UnitsConverter
         }
         catch(Exception)
         {
-            throw;
+            throw;  // or define another way to inform about incorrect input syntax
         }
 
         string[] inputPrefix = GetPrefix(inputMeasure);
         if(inputPrefix[0] != "")
         {
             inputMeasure = inputMeasure.Substring(inputPrefix[0].Length);
-            if(inputPrefix[1].Contains("b"))    //check for binary order
+            if(inputPrefix[1].Contains("b"))    // check for binary order
             {
                 inputPrefix[1] = inputPrefix[1].Substring(1);
                 inputValue *= Math.Pow(1024,Int32.Parse(inputPrefix[1]));
@@ -157,7 +159,7 @@ public class UnitsConverter
         {
             outputBase = output.Substring(outputPrefix[0].Length);
             outputValue = FromBaseUnit(outputBase, ToBaseUnit(inputMeasure, inputValue));
-            if(outputPrefix[1].Contains("b"))    //check for binary order
+            if(outputPrefix[1].Contains("b"))    // check for binary order
             {
                 outputPrefix[1] = outputPrefix[1].Substring(1);
                 outputValue /= Math.Pow(1024,Int32.Parse(outputPrefix[1]));
